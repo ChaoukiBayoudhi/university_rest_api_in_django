@@ -30,6 +30,22 @@ class studyLvel(models.TextChoices):
     SecondClass = ('S_Class','second class')
     ThirdClass = ('T_Class','third class')
 
+class Person(models.Model):
+    id=models.BigAutoField(primary_key=True,default=1)
+    name=models.CharField(max_length=100,null=False,blank=False,default='')
+    #null=False <=> not null in sql syntax
+    #blank=False <=> the field is required (on the forms.Form)
+    familyName=models.CharField(max_length=100,null=False,blank=False,default='')
+    password=models.CharField(max_length=100,null=True,blank=True, )
+    email=models.EmailField( max_length=50,unique=True,null=True,blank=True)
+    birthDate=models.DateField(default=date(2004,1,1))
+    #default=timezone.now() <=> provides system date as default value
+    
+    class Meta:
+        abstract=True
+        ordering=['name','familyName']
+
+
 class Group(models.Model):
     name= models.CharField(max_length=100,unique=True)
     # level= models.CharField(max_length=100,choices=StudyLevel,default=StudyLevel[0][0])
@@ -62,19 +78,11 @@ class Address(models.Model):
     city=models.CharField(max_length=200,null=False,blank=False)
     postal_code=models.IntegerField(default=1000,null=False,blank=False)
 
-class Student(models.Model):
-    inscriptionNumber = models.CharField(max_length=20,primary_key=True)
+class Student(Person):
+    photo=models.ImageField(upload_to='photos/students', max_length=200,null=True,blank=True)
+    #inscriptionNumber = models.CharField(max_length=20,primary_key=True)
     # inscription Number is the primary key
     #number= models.AutoField() # generates an auto increment integer primary key
-    name=models.CharField(max_length=100,null=False,blank=False,default='')
-    #null=False <=> not null in sql syntax
-    #blank=False <=> the field is required (on the forms.Form)
-    familyName=models.CharField(max_length=100,null=False,blank=False)
-    password=models.CharField(max_length=100,null=True,blank=True, )
-    email=models.EmailField( max_length=50,unique=True)
-    birthDate=models.DateField(default=date(2004,1,1))
-    #default=timezone.now() <=> provides system date as default value
-    photo=models.ImageField(upload_to='photos/students', max_length=200)
     #specification of the many to One relationship between Student and Group
     group=models.ForeignKey(Group, null=True, blank=True,on_delete=models.CASCADE)
     #specification of the one to one relationship between Student and Address
@@ -84,7 +92,6 @@ class Student(models.Model):
 
     class Meta:
         db_table='student'
-        # ordering=['name','familyName']
 
 
     def __str__(self):
@@ -105,8 +112,10 @@ class Module(models.Model):
     def __str__(self):
         return 'name = %s, due = %s'%(self.name,self.due)
 
-class Teacher(models.Model):
-    grade=models.CharField(max_length=200)
+class Teacher(Person):
+    email_work=models.EmailField(verbose_name="workemail", max_length=150,null=True, blank=True)
+    photo=models.ImageField(upload_to='photos/teachers', max_length=200,null=True,blank=True)
+    grade=models.CharField(max_length=200,null=True,blank=True)
     teacher_modules=models.ManyToManyField(Module,through='TeacherModules',through_fields=('teacher','module'))
 class TeacherModules(models.Model): #description of the association class between Module and Teache (many to many relationship)
     teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
