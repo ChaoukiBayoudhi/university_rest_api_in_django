@@ -107,7 +107,7 @@ class Module(models.Model):
     #specification of the many to many relationship between Module and Group
     #crerate the association class between Module and Group
     #the association class may be created on Group class but not on both
-    study=models.ManyToManyField(Group,blank=True, null=True)
+    study=models.ManyToManyField(Group)
 
     def __str__(self):
         return 'name = %s, due = %s'%(self.name,self.due)
