@@ -109,8 +109,6 @@ class Module(models.Model):
     #the association class may be created on Group class but not on both
     study=models.ManyToManyField(Group)
 
-
-
     def __str__(self):
         return 'name = %s, due = %s'%(self.name,self.due)
 
