@@ -31,7 +31,7 @@ class studyLvel(models.TextChoices):
     ThirdClass = ('T_Class','third class')
 
 class Person(models.Model):
-    id=models.BigAutoField(primary_key=True,default=1)
+    #id=models.BigAutoField(primary_key=True,default=1)
     name=models.CharField(max_length=100,null=False,blank=False,default='')
     #null=False <=> not null in sql syntax
     #blank=False <=> the field is required (on the forms.Form)

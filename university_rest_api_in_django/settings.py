@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'university_app',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -76,11 +78,34 @@ WSGI_APPLICATION = 'university_rest_api_in_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'university_db',
+        'USER':'user1',
+        'PASSWORD':'user01',
+        'HOST':'localhost',
+        'PORT':5432,
     }
+    
 }
 
+
+# if 'localhost' in os.environ:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': os.environ['university_db'],
+#             'USER': os.environ['user1'],
+#             'PASSWORD': os.environ['user01'],
+#             'HOST': os.environ['127.0.0.1'],
+#             'PORT': os.environ['5432'],
+#             'OPTIONS': {
+#                 'options': '-c search_path=django,public'
+#             },
+#             'TEST': {
+#                 'NAME': 'test', # test database name
+#             },
+#         },
+#     }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
