@@ -36,7 +36,7 @@ class Person(models.Model):
     #null=False <=> not null in sql syntax
     #blank=False <=> the field is required (on the forms.Form)
     familyName=models.CharField(max_length=100,null=False,blank=False,default='')
-    password = models.CharField(_('password'), max_length=128)
+    password = models.CharField( max_length=128)
     email=models.EmailField( max_length=50,unique=True,null=True,blank=True)
     birthDate=models.DateField(default=date(2004,1,1))
     #default=timezone.now() <=> provides system date as default value
