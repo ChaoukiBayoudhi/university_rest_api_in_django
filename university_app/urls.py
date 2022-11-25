@@ -18,7 +18,9 @@ from . import views
 # ]
 
 urlpatterns = [
-    path(r'all/',views.get_all_students),
-    path(r'add/',views.add_student),
-    path(r'delete/',views.delete_student),
+    path(r'student/all/',views.get_all_students),
+    path(r'student/add/',views.add_student),
+    path(r'student/delete/',views.delete_student),
+    path(r'group/',views.get_all_or_add_group),
+    path(r'group/<int:id>',views.retreive_update_or_delete_group),
 ]
