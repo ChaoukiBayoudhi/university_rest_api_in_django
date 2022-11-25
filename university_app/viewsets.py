@@ -2,6 +2,7 @@ from university_app.serializers import AddressSerializer, GroupSerializer, Stude
 from rest_framework import viewsets
 from .models import Student, Group, Address
 
+
 class StudentViewSet(viewsets.ModelViewSet):
 
     queryset = Student.objects.all()
