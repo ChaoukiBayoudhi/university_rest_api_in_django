@@ -64,15 +64,27 @@ def get_all_or_add_group(request):
  
 @api_view(['GET','PUT','DELETE'])
 def retreive_update_or_delete_group(request,id):
-    if request.method=='GET':
         try:
             group=Group.objects.get(pk=id)
-            serializer=GroupSerializer(group)
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            if request.method=='GET':
+    
+                serializer=GroupSerializer(group)
+                return Response(serializer.data,status=status.HTTP_200_OK)
+       
+            elif request.method=='PUT':
+              serialzer=GroupSerializer(group,data=request.data)#get group informations from the request and update the instance of group geted by nid from the DB.
+              if serialzer.is_valid():
+                serialzer.save()
+                return Response(status=status.HTTP_202_ACCEPTED)
+              return Response(serialzer.errors,status=status.HTTP_400_BAD_REQUEST)
+            elif request.method=='DELETE':
+                group.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT) # to say that the deleted group no longer exists
+                #or
+                #return JsonResponse({"message":"The group was successuflly deleted"},status=status.HTTP_202_ACCEPTED)
+            return JsonResponse({"message":"The method is not allowed"},status=status.HTTP_405_METHOD_NOT_ALLOWED)
         except Group.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-    elif request.method=='PUT':
-       pass
-    elif request.method=='DELETE':
-        pass
-    return JsonResponse({"message":"The method is not allowed"},status=status.HTTP_405_METHOD_NOT_ALLOWED)
+@api_view(['GET'])
+def get_students_in_group (request, name):
+    pass
