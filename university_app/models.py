@@ -36,7 +36,7 @@ class Person(models.Model):
     #null=False <=> not null in sql syntax
     #blank=False <=> the field is required (on the forms.Form)
     familyName=models.CharField(max_length=100,null=False,blank=False,default='')
-    password = models.CharField( max_length=128,default='')
+    password = models.CharField( max_length=128,null=False,blank=False,default='')
     email=models.EmailField( max_length=50,unique=True,null=True,blank=True)
     birthDate=models.DateField(default=date(2004,1,1))
     #default=timezone.now() <=> provides system date as default value
@@ -77,7 +77,8 @@ class Address(models.Model):
     street=models.CharField(max_length=200,null=False,blank=False,verbose_name='Street Name')
     city=models.CharField(max_length=200,null=False,blank=False)
     postal_code=models.IntegerField(default=1000,null=False,blank=False)
-
+    class Meta:
+        db_table='address'
 class Student(Person):
     photo=models.ImageField(upload_to='photos/students', max_length=200,null=True,blank=True)
     #inscriptionNumber = models.CharField(max_length=20,primary_key=True)
@@ -109,14 +110,19 @@ class Module(models.Model):
 
     def __str__(self):
         return 'name = %s, due = %s'%(self.name,self.due)
-
+    class Meta:
+        db_table='module'
 class Teacher(Person):
     email_work=models.EmailField(verbose_name="workemail", max_length=150,null=True, blank=True)
     photo=models.ImageField(upload_to='photos/teachers', max_length=200,null=True,blank=True)
     grade=models.CharField(max_length=200,null=True,blank=True)
     teacher_modules=models.ManyToManyField(Module,through='TeacherModules',through_fields=('teacher','module'))
+    class Meta:
+        db_table='teacher'
 class TeacherModules(models.Model): #description of the association class between Module and Teache (many to many relationship)
     teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
     module=models.ForeignKey(Module,on_delete=models.CASCADE)
     year=models.IntegerField(default=timezone.now().year)
-    nb_Hours=models.IntegerField(default=1)   
+    nb_Hours=models.IntegerField(default=1)
+    class Meta:
+        db_table='teacher_modules'   
